@@ -66,7 +66,11 @@ def createStudentUser(request):
         profile.save()
         subject="Registration at Details Education"
         message=f"\t\t WELCOME TO DETAIL EDUCATION \n\n\n\n\nHello,{user.first_name},\nYour new account has been created at the Details education website with the following credentials:\nUsername:{user.username}\nPassword:{password}\nWelcome Aboard, Use the details website to benefit from different feature that will only make things more convinient for you.\n\n\n\n\nNote:PLEASE CHANGE YOUR PASSWORD AFTER THE FIRST LOGIN."
-        user.email_user(subject,message,settings.EMAIL_HOST_USER)
+        try:
+            user.email_user(subject,message,settings.EMAIL_HOST_USER)
+        except:
+            user.delete()
+            return Response({'message':"Email sevice not working"},status=status.HTTP_400_BAD_REQUEST)
         data['response']='successfully created a new student user'
         data['username']=user.username
     else:

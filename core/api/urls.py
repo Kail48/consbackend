@@ -20,5 +20,6 @@ urlpatterns = [
     path('staff/',views.deleteStaff),
     path('change-password/',views.changePassword),
     path('book/',views.createBooking),
-    path('booking/',views.bookingView)
+    path('booking/',views.bookingView),
+
 ]

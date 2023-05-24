@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 import uuid
 # Create your models here.
 User=get_user_model()
+class ImageField(models.ImageField):
+    def value_to_string(self, obj): # obj is Model instance, in this case, obj is 'Class'
+        return obj.fig.url # not return self.url
 class StudentProfile(models.Model):
     id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)
     name=models.CharField(max_length=200,null=True)

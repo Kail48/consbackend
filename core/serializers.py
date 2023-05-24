@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Country,Booking
+from .models import Country,Booking,University,Story
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 User=get_user_model()
@@ -91,4 +91,21 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model=Booking
         fields=['pid','name','email','phone','country','marital_status','qualification','year_passed','course','date','time']
+
+class UniversitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=University
+        fields=["name","link","logo"]
+
+
+
+class StorySerializer(serializers.ModelSerializer):
+    img=serializers.SerializerMethodField()
+    class Meta:
+        model=Story
+        fields=["name","country","image","text",'img']
+    def get_img(self,obj):
+        request = self.context.get('request')
+        return str(request.build_absolute_uri(obj.image.url))
 
