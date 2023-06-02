@@ -37,7 +37,7 @@ def addUniversity(request):
     if request.FILES.get('image'):
         image=request.FILES.get('image')
     if name is not None and image is not None:
-        uni=University.objects.create(name=name,link=link,image=image)
+        uni=University.objects.create(name=name,link=link,logo=image)
         uni.save()
         return Response({'message':'saved successfully'})
     else:
@@ -49,6 +49,7 @@ def addStory(request):
     country=None
     image=None
     text=None
+    print('checking data')
     if request.data.get('name'):
         name=request.data.get('name')
     if request.data.get('country'):
@@ -57,11 +58,14 @@ def addStory(request):
         text=request.data.get('text')
     if request.FILES.get('image'):
         image=request.FILES.get('image')
+    print(name,country,text,image)
     if name is not None and image is not None and country is not None:
+        print('saving')
         story=Story.objects.create(name=name,country=country,image=image,text=text)
         story.save()
         return Response({'message':'saved successfully'})
     else:
+        print('failed')
         return Response({'message':'please provide valid data'},status=status.HTTP_400_BAD_REQUEST)
     
 

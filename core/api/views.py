@@ -51,7 +51,7 @@ def createStaffUser(request):
         data['username']=user.username
     else:
         data=serializer.errors
-    return Response(data,status=status.HTTP_400_BAD_REQUEST)
+    return Response(data)
 
 from django.conf import settings
 @api_view(['POST'])
@@ -91,9 +91,14 @@ def deleteStudent(request):
     if request.data.get('id'):
         if request.method=='DELETE':
             try:
-                student=User.objects.get(id=request.data.get('id'))
-                data={'message':'Successfully deleted student user with username '+student.username}
-                student.delete()
+                print("id received"+request.data.get('id'))
+                profile=StudentProfile.objects.get(id=request.data.get('id'))
+                print(profile)
+                
+                user=profile.getUser()
+                data={'message':'Successfully deleted student user with username '+user.username}
+                print(user)
+                user.delete()
                 return Response(data)
             except:
                 data={'message':'ID does not match any student in the database'}
@@ -145,6 +150,7 @@ def changePassword(request):
         old_password=request.data.get("old_password")
         password=request.data.get("password")
         password2=request.data.get("password2")
+        print(old_password,password,password2)
         if password!=password2:
             return Response({'password':'The two passwords must match'},status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -154,7 +160,7 @@ def changePassword(request):
                     return Response({'password':'New password cannot be old password'},status=status.HTTP_400_BAD_REQUEST)
                 user.set_password(password)
                 user.save()
-                
+                print('password changed')
                 return Response({"message":"Successfully changed user password"})
             else:
                 return Response({"message":"Old password does not match"},status=status.HTTP_400_BAD_REQUEST)
@@ -164,7 +170,7 @@ def changePassword(request):
 def bookingView(request):
    
     if request.method=='GET':
-        bookings=Booking.objects.all()
+        bookings=Booking.objects.all().order_by('created')
         serializer=BookingSerializer(bookings,many=True)
         return Response(serializer.data)
     if request.method=='DELETE':

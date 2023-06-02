@@ -21,6 +21,8 @@ class StudentProfile(models.Model):
         return self.student.username+" profile"
     def checkProfile(self):
         self.checked=True
+    def getUser(self):
+        return self.student
 
 class DocumentCategory(models.Model):
     name=models.CharField(max_length=200,unique=True,primary_key=True)
@@ -36,6 +38,8 @@ class DocumentFile(models.Model):
     filename=models.CharField(max_length=200,null=True)
     file=models.FileField(blank=False,null=True,upload_to='others/')
     verified=models.BooleanField(default=False)
+    feedback=models.TextField(max_length=500,null=True)
+    feedback_by=models.CharField(max_length=200,null=True)
     verified_by=models.CharField(max_length=200,null=True)
     def __str__(self):
         return self.filename
@@ -48,6 +52,10 @@ class DocumentFile(models.Model):
     def verify(self,staff_name):
         self.verified=True
         self.verified_by=staff_name
+        self.save()
+    def write_feedback(self,staff_name,comment):
+        self.feedback=comment
+        self.feedback_by=staff_name
         self.save()
     
 
