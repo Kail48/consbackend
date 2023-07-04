@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'students.apps.StudentsConfig',
     'rest_framework_simplejwt.token_blacklist',
-    'rest_framework'
+    'rest_framework',
+     'django_cleanup.apps.CleanupConfig',
 ]
 REST_FRAMEWORK = {
     
